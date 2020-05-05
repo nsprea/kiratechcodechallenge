@@ -1,0 +1,22 @@
+---
+- name: Become block
+  block:
+    - name: Install required packages
+      apt:
+        name: '{{ docker_packages_base | union(docker_packages_additional) | unique }}'
+        state: present
+        update_cache: true
+      register: installed_package
+      until: installed_package is succeeded
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: '{{ docker_gpg }}'
+      register: installed_package
+      until: installed_package is succeeded
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: '{{ docker_repo }}'
+        validate_certs: true
+  become: true

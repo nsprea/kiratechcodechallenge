@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    - role: ansible-role-docker
+  vars:
+    daemon_conf:
+      storage-driver: vfs
+      data-root: /opt/

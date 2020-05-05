@@ -1,0 +1,31 @@
+sudo: required
+language: python
+python:
+  - "3.6"
+
+cache: pip
+
+services:
+  - docker
+
+addons:
+  apt:
+    packages:
+      - docker-ce=18.06.1~ce~3-0~ubuntu
+
+install:
+  - pip install -r requirements.txt
+
+script:
+  - molecule test
+
+notifications:
+  webhooks:
+    urls:
+      - https://galaxy.ansible.com/api/v1/notifications/
+    on_pull_requests: false
+    on_success: always
+    on_failure: never
+    on_start: never
+    on_cancel: never
+    on_error: never

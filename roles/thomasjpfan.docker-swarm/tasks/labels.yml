@@ -1,0 +1,56 @@
+---
+
+- name: label | Get Node ID
+  command: >
+    docker info -f {% raw %}'{{ .Swarm.NodeID }}'{% endraw %}
+  register: _docker_swarm_node_id
+  changed_when: false
+  tags:
+    - docker-swarm-labels
+
+- name: label | Set fact node_id
+  set_fact:
+    docker_swarm_node_id: "{{ _docker_swarm_node_id.stdout }}"
+  tags:
+    - docker-swarm-labels
+
+- name: label | Get list of labels
+  command: >-
+    docker inspect -f {% raw %}'{{ json .Spec.Labels }}'{% endraw %}
+    {{ docker_swarm_node_id }}
+  register: docker_swarm_current_labels
+  changed_when: false
+  delegate_to: "{{ docker_swarm_primary_manager_name }}"
+  delegate_facts: true
+  tags:
+    - docker-swarm-labels
+
+- name: label | Set current labels
+  set_fact:
+    docker_swarm_current_labels: >-
+      {{ docker_swarm_current_labels.stdout | from_json }}
+  tags:
+    - docker-swarm-labels
+
+- name: labels | Remove old labels
+  command: >-
+    docker node update --label-rm {{ item }} {{ docker_swarm_node_id }}
+  delegate_to: "{{ docker_swarm_primary_manager_name }}"
+  with_items: >
+    {{ docker_swarm_current_labels |
+        list |
+        difference(docker_swarm_labels | default({}) | list) }}
+  tags:
+    - docker-swarm-labels
+
+- name: labels | Add new labels
+  command: >-
+    docker node update --label-add {{ item.key }}={{ item.value }}
+    {{ docker_swarm_node_id }}
+  delegate_to: "{{ docker_swarm_primary_manager_name }}"
+  when: >-
+     (docker_swarm_current_labels[item.key] is not defined) or
+     (docker_swarm_current_labels[item.key] != item.value)
+  with_dict: "{{ docker_swarm_labels | default({}) }}"
+  tags:
+    - docker-swarm-labels

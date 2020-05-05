@@ -1,0 +1,22 @@
+---
+- hosts: vms
+  become: true
+
+  roles:
+    - role: resize_partition
+    - role: lean_delivery.docker
+    - role: thomasjpfan.docker-swarm
+      docker_swarm_network_interface: "eth1"
+      docker_swarm_port: 2377
+   # - role: nickjj.docker
+   #   tags: ["docker"]
+#    - role: atosatto.docker-swarm
+#      docker_swarm_network: 192.168.100.0/24
+#         skip_repo: true
+#      skip_containerd: true
+#         skip_engine: true
+#         skip_cli: false
+#         skip_swarm: false
+#         skip_group: true
+#         skip_docker_py: false
+#         skip_docker_compose: true

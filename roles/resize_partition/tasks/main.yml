@@ -1,0 +1,24 @@
+---
+- name: Read device information
+  parted: device=/dev/sda unit=MiB state=info
+  register: sda_info
+
+- name: Create a new  partition
+  parted:
+    device: /dev/sda
+    number: 2
+    state: present
+    part_start: "{{ sda_info.partitions[0].end }}MiB"
+    part_end: "100%"
+
+- name: Format partition
+  filesystem:
+    fstype: ext4
+    dev: /dev/sda2
+
+- name: Mount partition
+  mount:
+    fstype: ext4
+    src: /dev/sda2
+    path: /var/lib/docker
+    state: mounted
