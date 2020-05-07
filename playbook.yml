@@ -1,22 +1,61 @@
 ---
-- hosts: vms
+- name: Provision two VMs, create docker swarm
+  hosts: vms
   become: true
 
   roles:
     - role: resize_partition
+    - role: install_containerd_io
     - role: lean_delivery.docker
+      vars:
+        docker_version: 19.03
     - role: thomasjpfan.docker-swarm
-      docker_swarm_network_interface: "eth1"
-      docker_swarm_port: 2377
-   # - role: nickjj.docker
-   #   tags: ["docker"]
-#    - role: atosatto.docker-swarm
-#      docker_swarm_network: 192.168.100.0/24
-#         skip_repo: true
-#      skip_containerd: true
-#         skip_engine: true
-#         skip_cli: false
-#         skip_swarm: false
-#         skip_group: true
-#         skip_docker_py: false
-#         skip_docker_compose: true
+      vars:
+        docker_swarm_network_interface: "eth1"
+        docker_swarm_port: 2377
+
+- name: Verify docker API is accessible from localhost
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Deploy docker swarm service
+      docker_swarm_service:
+        docker_host: "ssh://vm1.vagrant"
+        name: myservice
+        replicas: 1
+        image: alpine
+        command: ping
+        args:
+          - "kiratech.it"  
+
+    - name: Get swarm info
+      docker_swarm_info:
+        docker_host: "ssh://vm1.vagrant"
+        nodes: yes
+       # services: yes
+      register: swarm_info
+
+    - name: Print swarm info
+      debug:
+        msg: "{{ item | dictsort | map('join',':') | join('\n') }}"
+      with_items: "{{ swarm_info.nodes}}"
+
+    - name: Get info from a service
+      docker_swarm_service_info:
+        docker_host: "ssh://vm1.vagrant"
+        name: myservice
+      register: service_info
+    
+    - name: Print service info
+      vars:
+        msg: |
+          Created at: {{ service_info.service.CreatedAt }}
+          ID: {{ service_info.service.ID}}
+          Updated at: {{ service_info.service.UpdatedAt }}
+          Spec: {{ service_info.service.Spec | dictsort | map('join',': ') | join('\n') }}
+      debug:
+        msg: "{{ msg.split('\n')}}"
+
+  tags:
+    - deploy
