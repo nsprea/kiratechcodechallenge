@@ -27,7 +27,7 @@
         image: alpine
         command: ping
         args:
-          - "kiratech.it"  
+          - "kiratech.it"
 
     - name: Get swarm info
       docker_swarm_info:
@@ -39,23 +39,23 @@
     - name: Print swarm info
       debug:
         msg: "{{ item | dictsort | map('join',':') | join('\n') }}"
-      with_items: "{{ swarm_info.nodes}}"
+      with_items: "{{ swarm_info.nodes }}"
 
     - name: Get info from a service
       docker_swarm_service_info:
         docker_host: "ssh://vm1.vagrant"
         name: myservice
       register: service_info
-    
+
     - name: Print service info
       vars:
         msg: |
           Created at: {{ service_info.service.CreatedAt }}
-          ID: {{ service_info.service.ID}}
+          ID: {{ service_info.service.ID }}
           Updated at: {{ service_info.service.UpdatedAt }}
           Spec: {{ service_info.service.Spec | dictsort | map('join',': ') | join('\n') }}
       debug:
-        msg: "{{ msg.split('\n')}}"
+        msg: "{{ msg.split('\n') }}"
 
   tags:
     - deploy

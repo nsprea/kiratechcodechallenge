@@ -1,3 +1,4 @@
+[![CI](https://travis-ci.org/nsprea/kiratechcodechallenge.svg?branch=master)](https://travis-ci.org/nsprea/kiratechcodechallenge)
 # kiratechcodechallenge
 Ansible code challenge for Kiratech
 
@@ -14,7 +15,7 @@ Write an Ansible playbook that performs the following tasks:
        **TODO Expose API using TLS**
    2. ~~Make sure Docker starts at bootup~~
 5. ~~Create a Docker swarm~~
-  + ~~Make sure to be able to deploy a service from localhost~~
+   + ~~Make sure to be able to deploy a service from localhost~~
   
 _Optional:_
 
