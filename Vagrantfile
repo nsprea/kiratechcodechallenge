@@ -27,7 +27,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "playbook.yml"
       ansible.inventory_path = "inventory"
-      ansible.become = true
       ansible.limit = "all"
     end
   end
