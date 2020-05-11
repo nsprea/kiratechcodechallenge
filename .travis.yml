@@ -1,10 +1,13 @@
 language: python
 python:
 - "3.6"
-
-# command to install dependencies
+services:
+  - docker
 install:
-- pip install -r tests/test-requirements.txt
-# command to run tests
+  - pip install ansible-lint yamllint flake8
+  - pip install molecule docker
 script:
-- ansible-lint . --exclude ./roles/thomasjpfan.docker-swarm
+  - ansible-lint . --exclude ./roles/thomasjpfan.docker-swarm
+  - molecule --version
+  - ansible --version
+  - cd roles/lean_delivery.docker/ && molecule test
