@@ -8,7 +8,7 @@ Write an Ansible playbook that performs the following tasks:
 - [x] 2. Resize partition used by Docker.
 - [x] 3. Install Docker
 - [x] 4. Configure Docker:
-   - [x] 1. Expose API REST on Docker Daemon
+   - [ ] 1. Expose API REST on Docker Daemon
       + Currently using SSH:
         > Starting with Docker 18.09, the Docker client supports connecting to a remote daemon via SSH
       
@@ -19,16 +19,16 @@ Write an Ansible playbook that performs the following tasks:
   
 _Optional:_
 
-- [ ] 6. Test one task using `Molecule`
+- [x] 6. Test one task using `Molecule`
 
 _Versioning_
 - [x] Push code on a Github repo
 
 _Continuous Integration_
 - [x] 1. Create a pipeline on `Travis`
-- [ ] 2. Pipeline must:
+- [x] 2. Pipeline must:
   - [x] Run code linting
-  - [ ] Run test as for Step 6 automatically, every time some code is pushed to the repo.
+  - [x] Run test as for Step 6 automatically, every time some code is pushed to the repo.
 
 ## Getting started
 This README file is inside a folder that contains a `Vagrantfile` which tells Vagrant how to set up your virtual machines in VirtualBox.
