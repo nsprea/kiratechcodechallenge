@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include lean_delivery.docker"
+      include_role:
+        name: "lean_delivery.docker"
+      vars:
+        daemon_conf:
+          storage-driver: vfs
+          data-root: /opt/

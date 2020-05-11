@@ -1,47 +1,19 @@
 ---
 dependency:
   name: galaxy
-  options:
-    role-file: requirements.yml
 driver:
   name: docker
-lint:
-  name: yamllint
-  options:
-    config-file: .yamllint
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+  flake8
 platforms:
-  - name: test-docker-centos7-docker
-    image: leandelivery/docker-systemd:centos7
+  - name: centos7
+    image: centos:7
+    command: "/usr/sbin/init"
     privileged: true
-    groups:
-      - rhel_family
-  - name: test-docker-ubuntu1804-docker
-    image: leandelivery/docker-systemd:ubuntu-18.04
-    privileged: true
-    security_opts:
-      - seccomp=unconfined
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    tmpfs:
-      - /tmp
-      - /run
-    capabilities:
-      - SYS_ADMIN
-    groups:
-      - debian_family
 provisioner:
   name: ansible
-  log: false
-  lint:
-    name: ansible-lint
-  config_options:
-    defaults:
-      callback_whitelist: profile_tasks,timer
-  playbooks:
-    verify: ../resources/tests/verify.yml
-scenario:
-  name: default
 verifier:
   name: ansible
-  lint:
-    name: ansible-lint
