@@ -10,12 +10,12 @@
         state: "installed"
       check_mode: yes
       register: pkg_status
- 
+
     - name: "docker - test docker package is installed"
       assert:
         that:
           - not pkg_status.changed
-  
+
     - name: "docker - check docker service status"
       service:
         name: "docker"
@@ -23,7 +23,7 @@
         enabled: "yes"
       check_mode: yes
       register: svc_status
-  
+
     - name: "docker - test docker service is started and enabled"
       assert:
         that:
