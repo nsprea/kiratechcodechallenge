@@ -1,6 +1,14 @@
+# Kiratech Code Challenge
 [![CI](https://travis-ci.org/nsprea/kiratechcodechallenge.svg?branch=master)](https://travis-ci.org/nsprea/kiratechcodechallenge)
-# kiratechcodechallenge
 Ansible code challenge for Kiratech
+
+## Contents
+1. [Assignment](#assignment)
+2. [Getting started](#getting-started)
+  1. [Requirements](#requirements)
+    + [SSH Configuration](#ssh-configuration)
+  2. [Quick setup on Ubuntu](#quick-setup-on-ubuntu)
+  3. [RUn the playbook](#run-the-playbook) 
 
 ## Assignment
 Write an Ansible playbook that performs the following tasks:
@@ -18,7 +26,6 @@ Write an Ansible playbook that performs the following tasks:
    - [x] Make sure to be able to deploy a service from localhost
   
 _Optional:_
-
 - [x] 6. Test one task using `Molecule`
 
 _Versioning_
@@ -31,12 +38,46 @@ _Continuous Integration_
   - [x] Run test as for Step 6 automatically, every time some code is pushed to the repo.
 
 ## Getting started
-This README file is inside a folder that contains a `Vagrantfile` which tells Vagrant how to set up your virtual machines in VirtualBox.
+This steps will take you into running this playbook on your local environment.
+If you are running Ubuntu, jump to [Quick setup on Ubuntu](#quick-setup-on-ubuntu)
 
-To use the vagrant file, please follow this procedure:
-1. Install VirtualBox
-2. Install Vagrant
-3. Install Ansible
-4. Open a shell prompt (Terminal app on a Mac) and cd into the folder containing the `Vagrantfile`
-5. Run the following command to install the necessary Ansible roles for this profile: `$ ansible-galaxy install -r requirements.yml`
-6. Run the following command to create the VMs and provision them `vagrant up`
+### Requirements
+This project makes use of the following packages and plugins:
++ virtualbox
++ vagrant
+  + vagrant-hostsupdater plugin
+  + vagrant-disksize plugin
++ docker-ce
++ docker-ce-cli
++ python
++ pip
+  + ansible
+  + molecule
+  + docker
+
+#### SSH Configuration
+It is also recommended to configure ssh as follows:
+1. Generate rsa keys in your `~/.ssh` folder:
+   ```
+   ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa -q
+   ```
+2. Edit your `~/.ssh/config ` as follows:
+   ```
+   Host 192.168.100.* *.vagrant
+     StrictHostKeyChecking no
+     UserKnownHostsFile=/dev/null
+     User root
+     LogLevel ERROR
+   ```
+ 
+### Quick setup on Ubuntu
+If you are running Ubuntu, all you have to do is running the setup script:
+```
+$ sudo ./workbench_setup.sh
+```
+ 
+### Run the playbook
+After you completed the installation steps, please run the following command to create the virtual machines and run the playbook:
+```
+vagrant up
+```
