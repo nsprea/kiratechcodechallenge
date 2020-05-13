@@ -1,5 +1,5 @@
 # Kiratech Code Challenge
-[![CI](https://travis-ci.org/nsprea/kiratechcodechallenge.svg?branch=master)](https://travis-ci.org/nsprea/kiratechcodechallenge)
+[![Build Status](https://travis-ci.org/nsprea/kiratechcodechallenge.svg?branch=master)](https://travis-ci.org/nsprea/kiratechcodechallenge)
 
 Ansible code challenge for Kiratech.
 
