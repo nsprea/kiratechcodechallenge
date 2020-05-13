@@ -1,14 +1,15 @@
 # Kiratech Code Challenge
 [![CI](https://travis-ci.org/nsprea/kiratechcodechallenge.svg?branch=master)](https://travis-ci.org/nsprea/kiratechcodechallenge)
-Ansible code challenge for Kiratech
+
+Ansible code challenge for Kiratech.
 
 ## Contents
 1. [Assignment](#assignment)
 2. [Getting started](#getting-started)
   1. [Requirements](#requirements)
-    + [SSH Configuration](#ssh-configuration)
+     + [SSH Configuration](#ssh-configuration)
   2. [Quick setup on Ubuntu](#quick-setup-on-ubuntu)
-  3. [RUn the playbook](#run-the-playbook) 
+  3. [Run the playbook](#run-the-playbook) 
 
 ## Assignment
 Write an Ansible playbook that performs the following tasks:
@@ -59,7 +60,7 @@ This project makes use of the following packages and plugins:
 It is also recommended to configure ssh as follows:
 1. Generate rsa keys in your `~/.ssh` folder:
    ```
-   ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa -q
+   $ ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa -q
    ```
 2. Edit your `~/.ssh/config ` as follows:
    ```
@@ -79,5 +80,5 @@ $ sudo ./workbench_setup.sh
 ### Run the playbook
 After you completed the installation steps, please run the following command to create the virtual machines and run the playbook:
 ```
-vagrant up
+$ vagrant up
 ```
