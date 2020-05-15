@@ -25,6 +25,16 @@
         state: directory
         mode: 0755
 
+    - name: Create /etc/systemd/system/docker.service.d/
+      file:
+        path: /etc/systemd/system/docker.service.d/
+        state: directory
+
+    - name: Copy docker.conf
+      copy:
+        src: docker.conf
+        dest: /etc/systemd/system/docker.service.d/
+
     - name: Create daemon.json file
       template:
         src: daemon.json.j2
