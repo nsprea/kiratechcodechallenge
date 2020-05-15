@@ -17,11 +17,7 @@ Write an Ansible playbook that performs the following tasks:
 - [x] 2. Resize partition used by Docker.
 - [x] 3. Install Docker
 - [x] 4. Configure Docker:
-   - [ ] 1. Expose API REST on Docker Daemon
-      + Currently using SSH:
-        > Starting with Docker 18.09, the Docker client supports connecting to a remote daemon via SSH
-      
-       **TODO Expose API using TLS**
+   - [x] 1. Expose API REST on Docker Daemon
    - [x] 2. Make sure Docker starts at bootup
 - [x] 5. Create a Docker swarm
    - [x] Make sure to be able to deploy a service from localhost
@@ -44,17 +40,17 @@ If you are running Ubuntu, jump to [Quick setup on Ubuntu](#quick-setup-on-ubunt
 
 ### Requirements
 This project makes use of the following packages and plugins:
-+ virtualbox
-+ vagrant
-  + vagrant-hostsupdater plugin
-  + vagrant-disksize plugin
-+ docker-ce
-+ docker-ce-cli
-+ python
-+ pip
-  + ansible
-  + molecule
-  + docker
++ `virtualbox`
++ `vagrant`
+  + `vagrant-hostsupdater` plugin
+  + `vagrant-disksize` plugin
++ `docker-ce`
++ `docker-ce-cli`
++ `python`
++ `pip`
+  + `ansible`
+  + `molecule`
+  + `docker`
 
 #### SSH Configuration
 It is also recommended to configure ssh as follows:
