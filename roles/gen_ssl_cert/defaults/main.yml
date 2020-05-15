@@ -1,0 +1,5 @@
+---
+
+ca_common_name: 'vm1.vagrant'
+server_common_name: 'vm1.vagrant'
+client_common_name: 'ubuntufocal'

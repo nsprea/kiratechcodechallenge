@@ -6,15 +6,25 @@
   roles:
     - role: resize_partition
     - role: install_containerd_io
+    - role: gen_ssl_cert
+      ca_common_name: '{{ inventory_hostname }}.vagrant'
+      server_common_name: '{{ inventory_hostname }}.vagrant'
     - role: lean_delivery.docker
       vars:
         docker_version: 19.03
+        daemon_conf:
+          tlsverify: true
+          tlscacert: '/root/ca.crt'
+          tlscert: '/root/server.crt'
+          tlskey: '/root/server-key.pem'
+          hosts: ['unix://','tcp://0.0.0.0:2376']
     - role: thomasjpfan.docker-swarm
       vars:
         docker_swarm_network_interface: "eth1"
         docker_swarm_port: 2377
+      tags: swarm
 
-- name: Verify docker API is accessible from localhost
+- name: Deploy service on swarm from localhost
   hosts: localhost
   become: false
 
@@ -33,7 +43,6 @@
       docker_swarm_info:
         docker_host: "ssh://vm1.vagrant"
         nodes: yes
-       # services: yes
       register: swarm_info
 
     - name: Print swarm info

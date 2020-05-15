@@ -1,0 +1,43 @@
+---
+- name: Generate server private key
+  openssl_privatekey:
+    path: ~/server-key.pem
+
+- name: Generate server Certificate Signing Request
+  openssl_csr:
+    path: ~/server.csr
+    privatekey_path: ~/server-key.pem
+    common_name: '{{ server_common_name }}'
+
+- name: Sign server certificate with CA cert
+  openssl_certificate:
+    path: ~/server.crt
+    csr_path: ~/server.csr
+    extended_key_usage:
+      - serverAuth
+    subject_alt_name:
+    # - dns:vm1.vagrant
+    #  - ip:192.168.100.2
+      - 'dns:{{ server_common_name }}'
+      - 'ip:{{ ansible_default_ipv4.address }}'
+      - ip:127.0.0.1
+    ownca_path: ~/ca.crt
+    ownca_privatekey_path: ~/ca-key.pem
+    ownca_privatekey_passphrase: ansible
+    provider: ownca
+
+
+- name: Change server private key  permissions
+  file:
+    path: ~/server-key.pem
+    mode: '0400'
+
+- name: Change CA cert  permissions
+  file:
+    path: ~/server.crt
+    mode: '0444'
+
+- name: Delete auxiliary files
+  file:
+    path: ~/server.csr
+    state: absent

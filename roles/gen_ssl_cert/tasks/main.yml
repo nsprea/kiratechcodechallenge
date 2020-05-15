@@ -1,0 +1,31 @@
+---
+- name: Create CA key and certificate
+  include_tasks: ca_key_cert.yml
+
+- name: Create server key and certificate
+  include_tasks: server_key_cert.yml
+
+- name: Create client key and certificate
+  include_tasks: client_key_cert.yml
+
+- name: Wait until keys are created
+  wait_for:
+    path: '{{ item }}'
+  with_items:
+    - '/root/client-key.pem' 
+    - '/root/ca.crt'
+    - '/root/client.crt'
+
+- name: Fetch CA certificate, client key and certificate
+  fetch:
+    src: '{{ item }}'
+    dest: '~/{{ inventory_hostname }}/'
+    flat: yes
+  become: yes
+  become_method: sudo
+  with_items:
+    - '/root/client-key.pem' 
+    - '/root/ca.crt'
+    - '/root/client.crt'
+  retries: 3
+  delay: 3

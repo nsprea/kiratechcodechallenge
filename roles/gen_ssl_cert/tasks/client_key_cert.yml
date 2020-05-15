@@ -1,0 +1,41 @@
+---
+- name: Generate client private key
+  openssl_privatekey:
+    path: ~/client-key.pem
+
+- name: Generate client Certificate Signing Request
+  openssl_csr:
+    path: ~/client.csr
+    privatekey_path: ~/client-key.pem
+    common_name: client #'{{ client_common_name }}'
+
+- name: Sign client certificate with CA cert
+  openssl_certificate:
+    path: ~/client.crt
+    csr_path: ~/client.csr
+    subject_alt_name:
+      - dns:ubuntufocal
+      - ip:192.168.100.1
+    extended_key_usage:
+      - clientAuth
+    ownca_path: ~/ca.crt
+    ownca_privatekey_path: ~/ca-key.pem
+    ownca_privatekey_passphrase: ansible
+    provider: ownca
+
+
+- name: Change client private key  permissions
+  file:
+    path: ~/client-key.pem
+    owner: vagrant
+    mode: '0400'
+
+- name: Change CA cert  permissions
+  file:
+    path: ~/client.crt
+    mode: '0444'
+
+- name: Delete auxiliary files
+  file:
+    path: ~/client.csr
+    state: absent

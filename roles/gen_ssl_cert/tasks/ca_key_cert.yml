@@ -1,0 +1,41 @@
+---
+- name: Generate CA private key with the AES and a passphrase
+  openssl_privatekey:
+    path: ~/ca-key.pem
+    passphrase: ansible
+    cipher: aes256
+
+- name: Generate CA Certificate Signing Request
+  openssl_csr:
+    path: ~/ca-cert.csr
+    privatekey_path: ~/ca-key.pem
+    privatekey_passphrase: ansible
+    useCommonNameForSAN: no
+    basic_constraints:
+      - CA:TRUE
+    basic_constraints_critical: yes
+    common_name: '{{ ca_common_name }}'
+
+- name: Generate a Self Signed CA certificate
+  openssl_certificate:
+    path: ~/ca.crt
+    privatekey_path: ~/ca-key.pem
+    privatekey_passphrase: ansible
+    ownca_create_authority_key_identifier: yes
+    csr_path: ~/ca-cert.csr
+    provider: selfsigned
+
+- name: Change CA private key  permissions
+  file:
+    path: ~/ca-key.pem
+    mode: '0400'
+
+- name: Change CA cert  permissions
+  file:
+    path: ~/ca.crt
+    mode: '0444'
+
+- name: Delete auxiliary files
+  file:
+    path: ~/ca-cert.csr
+    state: absent
